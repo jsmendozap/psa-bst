@@ -1,0 +1,197 @@
+---
+title: "Payment for ecosystem services as a measure for tropical dry forest conservation in Colombia" 
+subtitle: "Final work presented in Economics and Enviroment course"
+author:
+  name: "Juan Sebastián Mendoza Páez"
+  affiliation: "Forest engineering student"
+format:
+  revealjs:
+    footer: 'Payment for ecosystem services as a measure for tropical dry forest conservation in Colombia'
+    center: true
+    slide-number: true
+    theme: Auxiliar files/Tema.scss
+    self-contained: true
+    margin: 0.1
+    width: 1100
+css: Auxiliar files/styles.css
+bibliography: Auxiliar files/references.bib
+csl: Auxiliar files/apa.csl
+---
+
+## Tropical dry forest {.title}
+
+
+:::font-size="10px"
+It is an ecosystem caracterized by: 
+
+::: {.incremental}
+
+- Strong rain stationality.
+- Among 4 to 6 months per year of drought.
+- Restricted to lowlands from Mexico to Bolivia and Brazil in neotropic.
+- Physiological and morphological adaptations of plants and animals.
+:::
+
+:::
+
+::: {.fragment}
+
+:::{.callout-warning appearance="simple"}
+
+::: justify
+From ~9 million of hectares of original tropical dry forest extension, today only remain around of 8%. The livestock grazing and agriculture expansion are the main drivers of deforestation.
+:::
+
+:::
+
+:::
+
+::: cita
+[@bst_2014] 
+:::
+
+## Payment for ecosystem services (PES) {.title}
+
+::: justify
+- **The ecosystem services** are the ecological characteristics, functions, or processes that directly or indirectly contribute to human wellbeing: that is, the benefits that people obtain from functioning ecosystems [@costanza2017].
+
+::: {.incremental}
+- **PES** is an economic instrument which aim is ensuring the provision of ecosystem services through direct and conditional incomes to population of strategic ecosystems.
+:::
+
+:::
+
+## Objective {.title}
+
+::: justify
+The aim of this work was to determine the Colombian towns with potential to implement a PES scheme. The town potential was established through the opportunity cost^[The opportunity cost refers to the resources that people leave to perceive due to do not choice the best possible alternative.] of the main farming activities in regions where the tropical dry forest is present.
+:::
+
+## Methodology {.title}
+
+![](Auxiliar files/methodology.svg)
+
+## Results {.title}
+
+::: grid
+
+<div>
+```{r}
+pacman::p_load(leaflet, leaflet.extras, tidyverse, sf, geojsonsf, gt,
+               gtExtras, formattable)
+
+regiones <- st_read('Trabajo final/Shapes.gpkg', layer = 'regiones', quiet = T)
+datos <- geojson_sf('Resultados.geojson') %>% 
+  mutate(c_oportunidad = case_when(
+          c_oportunidad == "Bajo" ~ "Low",
+          c_oportunidad == "Medio" ~ "Medium",
+          c_oportunidad == "Alto" ~ "High",
+          c_oportunidad == "Muy Alto" ~ "Very High") %>%
+            factor(levels = c('Low', 'Medium', 'High', 'Very High')),
+        actividad = case_when(
+          actividad == "cultivos" ~ "Crops",
+          actividad == "forestal" ~ "Forestry",
+          actividad == "ganaderia" ~ "Livestock",
+          actividad == "avicultura" ~ "Poultri farming"
+        ))
+
+valores <- datos$c_oportunidad %>% unique
+
+color <- c("#ff0000", "#ff8300", "#ffbd00", "#e7f529") %>% rev
+paleta <- colorFactor(palette = color, valores)
+
+texto <- paste0(
+  "<b>Region:</b> ", datos$departamento %>% str_to_title, "<br/>",
+  "<b>City:</b> ", datos$municipio %>% str_to_title, "<br/>",
+  "<b>Activity:</b> ", datos$actividad, "<br/>",
+  "<b>Opportunity cost/ha:</b> ", formattable::currency(datos$utilidad, symbol = '$'), "<br/>",
+  "<b>Classification:</b> ", datos$c_oportunidad
+) %>% lapply(htmltools::HTML)
+
+leaflet(datos, width = 520) %>%
+  addProviderTiles(provider = providers$CartoDB.VoyagerNoLabels) %>%
+  addPolygons(data = regiones, weight = 0.5, group = 'Regions', fillOpacity = 0.2, col = 'gray') %>%
+  addPolygons(weight = 1.5, color = ~paleta(datos$c_oportunidad),
+              label = texto, group = 'Opportunity cost',
+              labelOptions = labelOptions(textsize = "13px")) %>%
+  addLegend(pal = paleta, values = ~c_oportunidad,
+            opacity = 0.5, title = 'Opportunity cost', position = "topright") %>%
+  addLayersControl(overlayGroups = c('Opportunity cost', 'Regions'),
+                   options = layersControlOptions(collapsed = F)) %>%
+  addMiniMap(position = "bottomright", toggleDisplay = T, width = 110, height = 120)
+```
+</div>
+
+::: {style="display: flex; flex-direction: column; justify-content: center; font-size: 20px"}
+
+::: {style="margin-bottom: 2vh"}
+**Key findings:** 
+
+- Andean region presented the major extension of tropical dry forest (~49%) followed by Orinoco region (~30%).
+- Approximately 300 thousands ha of tropical dry forest (30.1%) were classified with low opportunity cost.
+:::
+
+```{r}
+read.csv('resumen.csv') %>% 
+  mutate(region = case_when(
+    region == 'andina' ~ 'Andean',
+    region == "pacifica" ~ 'Pacific',
+    region == 'caribe' ~ 'Caribbean',
+    region == "orinoquia" ~ 'Orinoco'), 
+    c_oportunidad = case_when(
+          c_oportunidad == "Bajo" ~ "Low",
+          c_oportunidad == "Medio" ~ "Medium",
+          c_oportunidad == "Alto" ~ "High",
+          c_oportunidad == "Muy Alto" ~ "Very High") %>%
+            factor(levels = c('Low', 'Medium', 'High', 'Very High')),
+    actividad = case_when(
+          actividad == "cultivos" ~ "Crops",
+          actividad == "forestal" ~ "Forestry",
+          actividad == "ganaderia" ~ "Livestock",
+          actividad == "avicultura" ~ "Poultri farming"
+    )) %>%
+  filter(c_oportunidad == "Low") %>%
+  summarise(prop = n()/84*100, area_total = sum(area_bst),
+            range = list(range(utilidad)), .by = region) %>%
+  unnest_wider(col = 4) %>%
+  rename('minimo' = 4, 'maximo' = 5) %>%
+  gt() %>%
+  gt_plt_bar_pct(column = prop, fill = 'blue', background = 'lightblue', scaled = T) %>%
+  cols_align("center", contains("scale")) %>%
+  cols_width(2 ~ px(120)) %>%
+  gt_theme_nytimes() %>%
+  tab_header("Low opportunity cost per hectare by Colombian regions") %>%
+  cols_label(region = "Region", prop = "Municipalities",
+                 area_total = 'Total Area (ha)', minimo = 'Minimum',
+                 maximo = 'Maximum') %>%
+  tab_options(column_labels.text_transform = "capitalize") %>%
+  tab_spanner(label = 'Opportunity cost per hectare', columns = 4:5) %>%
+  tab_style(
+    style = list(
+      cell_text(font = google_font(name = "Playfair Display"),
+                    weight = '800', align = "left", color = '#203B46')),
+    locations = cells_title(groups = "title")) %>%
+  tab_style(
+    style = list(
+      cell_text(font = google_font(name = "Roboto Condensed"),
+                    align = "center", size='small')),
+    locations = cells_column_spanners()) %>%
+  fmt_number(columns = 3) %>%
+  fmt_currency(columns = 4:5)
+```
+
+:::
+
+:::
+
+## Conclusions {.title}
+
+- North departments of Colombia are key for the conservation of tropical dry forest. 
+
+:::{.incremental}
+- Opportunities to improve by getting information to fine scale.
+:::
+
+## Thanks {.title}
+
+## References {.title}

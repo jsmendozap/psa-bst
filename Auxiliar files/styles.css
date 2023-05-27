@@ -1,0 +1,50 @@
+.title h2 {
+  text-align: center;
+  padding-bottom: 3vh;
+}
+
+summary {
+  font-size: 20px;
+}
+
+.cell-output-display {
+  font-size: 20px;
+}
+
+.panel-tabset-tabby {
+  font-size: 25px;
+}
+
+.scrolling {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.size {
+  font-size: 35px;
+}
+
+.cita {
+  position: relative !important; 
+  margin-left: 240px;
+  font-size: 30px;
+  margin-top: 5vh;
+}
+
+.justify li {
+  text-align: justify;
+}
+
+.justify {
+  text-align: justify;
+}
+
+aside {
+  position: relative !important;
+  margin-top: 90px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
