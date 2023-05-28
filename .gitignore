@@ -4,3 +4,5 @@
 /Trabajo final/*.rda
 /Trabajo final/Fuente de datos.txt
 Costo_oportunidad_nuevo.R
+/.quarto/
+/_site/

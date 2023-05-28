@@ -128,8 +128,14 @@ leaflet(datos, width = 520) %>%
 **Key findings:** 
 
 - Andean region presented the major extension of tropical dry forest (~49%) followed by Orinoco region (~30%).
+
+::: {.incremental}
 - Approximately 300 thousands ha of tropical dry forest (30.1%) were classified with low opportunity cost.
 :::
+
+:::
+
+::: {.fragment}
 
 ```{r}
 read.csv('resumen.csv') %>% 
@@ -179,6 +185,8 @@ read.csv('resumen.csv') %>%
   fmt_number(columns = 3) %>%
   fmt_currency(columns = 4:5)
 ```
+
+:::
 
 :::
 
