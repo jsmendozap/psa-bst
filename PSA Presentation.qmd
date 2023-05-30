@@ -85,9 +85,10 @@ To determine the Colombian towns with potential to implement a PES scheme. The t
 ## Results {.title}
 
 ```{r}
-pacman::p_load(leaflet, leaflet.extras, tidyverse, sf, geojsonsf, formattable, sunburstR, d3r)
+pacman::p_load(leaflet, leaflet.extras, tidyverse, sf, geojsonsf, formattable,
+               echarts4r, htmlwidgets)
 
-tree <- read.csv('resumen.csv') %>% 
+data <- read.csv('resumen.csv') %>% 
   mutate(region = case_when(
     region == 'andina' ~ 'Andean',
     region == "pacifica" ~ 'Pacific',
@@ -104,18 +105,48 @@ tree <- read.csv('resumen.csv') %>%
       actividad == "forestal" ~ "Forestry",
       actividad == "ganaderia" ~ "Livestock",
       actividad == "avicultura" ~ "Poultri farming"
-    )) %>% 
-  group_by(region, c_oportunidad) %>% 
-  summarise(area = sum(area_bst)/100) %>%
-  rename(level1 = 1, level2 = 2, size = 3) %>%
-  d3_nest(value_cols = 'size')
+    ))
 
-sund2b(tree, width = '50%', height = 400, rootLabel = "Tropical dry forest",
-       showLabels = T)
+
+tooltip <- JS(
+'function(params) {',
+  'let USDollar = new Intl.NumberFormat("en-US", {',
+  '  style: "currency",',
+  '  currency: "USD",',
+  '})',
+
+  'const data = [',
+    '{"region":"Andean","area":4959.8889,"n":201,"low":48,"min":95.3589,"max":295.5117},',
+    '{"region":"Pacific","area":387.1506,"n":55,"low":2,"min":96.4336,"max":103.4846},',
+    '{"region":"Caribbean","area":1777.4974,"n":62,"low":34,"min": 103.4846,"max":257.5044},',
+    '{"region":"Orinoco","area":3005.7227,"n":23,"low":0,"min": "NA","max": "NA"}]',
+   
+   'const inf = data.filter(obj => {return obj.region === params.name})',
+   'return `<b>Municipalities:</b> ${inf[0].n} <br>
+            <b>Low opportunity cost:</b> ${inf[0].low}<br>
+            <b>Values:</b> ${USDollar.format(inf[0].min)} - ${USDollar.format(inf[0].max)}`',
+'}'
+)
+
+data %>% 
+  pivot_wider(names_from = c_oportunidad, values_from = municipio) %>% 
+  mutate(across(.cols = 8:11, .fns = ~ifelse(is.na(.x), 0, 1))) %>%
+  summarise(area = sum(area_bst)/100, .by = 'region', 
+            n = n(), low = sum(Low)) %>%
+  e_charts(region) %>%
+  e_pie(area, roseType = 'radius', name = 'Tropical dry forest',
+        label = list(
+          formatter = JS(
+            "function(params) {",
+            "return params.name + ' (' + params.percent + '%)';",
+            "}"
+          )
+        )) %>%
+  e_tooltip(formatter = tooltip)
+
 ```
 
-
-## Results {.title}
+## Results{.title}
 
 ```{r}
 regiones <- st_read('Trabajo final/Shapes.gpkg', layer = 'regiones', quiet = T)
@@ -146,7 +177,7 @@ texto <- paste0(
   "<b>Classification:</b> ", datos$c_oportunidad
 ) %>% lapply(htmltools::HTML)
 
-leaflet(datos, width = 520) %>%
+leaflet(datos) %>%
   addProviderTiles(provider = providers$CartoDB.VoyagerNoLabels) %>%
   addPolygons(data = regiones, weight = 0.5, group = 'Regions', fillOpacity = 0.2, col = 'gray') %>%
   addPolygons(weight = 1.5, color = ~paleta(datos$c_oportunidad),
@@ -156,8 +187,9 @@ leaflet(datos, width = 520) %>%
             opacity = 0.5, title = 'Opportunity cost', position = "topright") %>%
   addLayersControl(overlayGroups = c('Opportunity cost', 'Regions'),
                    options = layersControlOptions(collapsed = F)) %>%
-  addMiniMap(position = "bottomright", toggleDisplay = T, width = 110, height = 120)
+  addMiniMap(position = "bottomright", toggleDisplay = T, width = 100, height = 110)
 ```
+
 
 ## Conclusions {.title}
 
