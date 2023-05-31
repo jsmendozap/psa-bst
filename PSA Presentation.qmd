@@ -124,7 +124,8 @@ tooltip <- JS(
    'const inf = data.filter(obj => {return obj.region === params.name})',
    'return `<b>Municipalities:</b> ${inf[0].n} <br>
             <b>Low opportunity cost:</b> ${inf[0].low}<br>
-            <b>Values:</b> ${USDollar.format(inf[0].min)} - ${USDollar.format(inf[0].max)}`',
+            <b>Values:</b> ${inf[0].region === "Orinoco" ? "Does not apply" :
+            USDollar.format(inf[0].min) + " - " + USDollar.format(inf[0].max)}`',
 '}'
 )
 
