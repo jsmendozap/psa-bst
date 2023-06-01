@@ -73,7 +73,7 @@ From \~9 million of hectares of original tropical dry forest extension, today on
 ## Objective {.title}
 
 ::: justify
-To determine the Colombian towns with potential to implement a PES scheme. The town potential was established through the opportunity cost[^1] of the main farming activities in regions where the tropical dry forest is present.
+Determine the Colombian towns with potential to implement a PES scheme in biodiversity conservation modality. The town potential was established through the opportunity cost[^1] of the main farming activities in regions where the tropical dry forest is present.
 :::
 
 [^1]: The opportunity cost refers to the resources that people leave to perceive due to do not choice the best possible alternative.
@@ -194,10 +194,8 @@ leaflet(datos) %>%
 
 ## Conclusions {.title}
 
--   North departments of Colombia are key for the conservation of tropical dry forest.
-
-::: incremental
--   Opportunities to improve by getting information to fine scale.
+::: justify
+This work is a primer approach to the areas where strategies can be focused to preserve tropical dry forest in Colombia. However, it is necessary to work in those areas with data on a finer scale that represent adequately the economic dynamic of the farming activities in the region. 
 :::
 
 ## Thanks {.title}
