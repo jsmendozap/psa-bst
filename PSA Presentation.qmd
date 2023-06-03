@@ -84,6 +84,9 @@ Determine the Colombian towns with potential to implement a PES scheme in biodiv
 
 ## Results {.title}
 
+::: grid
+
+<div>
 ```{r}
 pacman::p_load(leaflet, leaflet.extras, tidyverse, sf, geojsonsf, formattable,
                echarts4r, htmlwidgets)
@@ -122,10 +125,12 @@ tooltip <- JS(
     '{"region":"Orinoco","area":3005.7227,"n":23,"low":0,"min": "NA","max": "NA"}]',
    
    'const inf = data.filter(obj => {return obj.region === params.name})',
-   'return `<b>Municipalities:</b> ${inf[0].n} <br>
+   'const min = Math.round(inf[0].min)',
+   'const max = Math.round(inf[0].max)',
+   'return `<p style="font-size: 20px; color: black"><b>Municipalities:</b> ${inf[0].n} <br>
             <b>Low opportunity cost:</b> ${inf[0].low}<br>
             <b>Values:</b> ${inf[0].region === "Orinoco" ? "Does not apply" :
-            USDollar.format(inf[0].min) + " - " + USDollar.format(inf[0].max)}`',
+            USDollar.format(min) + " - " + USDollar.format(max)}</p>`',
 '}'
 )
 
@@ -135,20 +140,17 @@ data %>%
   summarise(area = sum(area_bst)/100, .by = 'region', 
             n = n(), low = sum(Low)) %>%
   e_charts(region) %>%
-  e_pie(area, roseType = 'radius', name = 'Tropical dry forest',
-        label = list(
-          formatter = JS(
-            "function(params) {",
-            "return params.name + ' (' + params.percent + '%)';",
-            "}"
-          )
-        )) %>%
-  e_tooltip(formatter = tooltip)
-
+  e_pie(area, roseType = 'radius', name = 'Tropical dry forest') %>%
+  e_labels(show = F) %>%
+  e_text_style(fontSize = 20) %>%
+  e_tooltip(formatter = tooltip) %>%
+  e_legend(left = 'left', orient = 'vertical', itemGap = 30, height = 800, top = '10%') %>%
+  e_title(text = 'Tropical dry forest distribution by Colombian regions')
 ```
+</div>
 
-## Results{.title}
-
+<div>
+::: fragment
 ```{r}
 regiones <- st_read('Trabajo final/Shapes.gpkg', layer = 'regiones', quiet = T)
 datos <- geojson_sf('Resultados.geojson') %>% 
@@ -178,9 +180,9 @@ texto <- paste0(
   "<b>Classification:</b> ", datos$c_oportunidad
 ) %>% lapply(htmltools::HTML)
 
-leaflet(datos) %>%
+leaflet(datos, width = 540) %>%
   addProviderTiles(provider = providers$CartoDB.VoyagerNoLabels) %>%
-  addPolygons(data = regiones, weight = 0.5, group = 'Regions', fillOpacity = 0.2, col = 'gray') %>%
+  addPolygons(data = regiones, weight = 0.5, group = 'Regions', fillOpacity = 0.1, col = 'gray') %>%
   addPolygons(weight = 1.5, color = ~paleta(datos$c_oportunidad),
               label = texto, group = 'Opportunity cost',
               labelOptions = labelOptions(textsize = "13px")) %>%
@@ -190,7 +192,10 @@ leaflet(datos) %>%
                    options = layersControlOptions(collapsed = F)) %>%
   addMiniMap(position = "bottomright", toggleDisplay = T, width = 100, height = 110)
 ```
+:::
+</div>
 
+:::
 
 ## Conclusions {.title}
 
