@@ -59,7 +59,6 @@ From \~9 million of hectares of original tropical dry forest extension, today on
 
 ::: fragment
 ::: {style="text-align: center"}
-
 ::: {style="margin-top: 20px; font-size: 30px"}
 **PES modalities**
 :::
@@ -86,7 +85,9 @@ Determine the Colombian towns with potential to implement a PES scheme in biodiv
 
 ::: grid
 
-<div>
+::: fragment
+###### Tropical dry forest by Colombian regions
+
 ```{r}
 pacman::p_load(leaflet, leaflet.extras, tidyverse, sf, geojsonsf, formattable,
                echarts4r, htmlwidgets)
@@ -144,13 +145,13 @@ data %>%
   e_labels(show = F) %>%
   e_text_style(fontSize = 20) %>%
   e_tooltip(formatter = tooltip) %>%
-  e_legend(left = 'left', orient = 'vertical', itemGap = 30, height = 800, top = '10%') %>%
-  e_title(text = 'Tropical dry forest distribution by Colombian regions')
+  e_legend(left = 'left', orient = 'vertical', itemGap = 30, height = 800, top = '4%')
 ```
-</div>
+:::
 
-<div>
 ::: fragment
+###### Opportunity cost in Colombian tropical dry forest
+
 ```{r}
 regiones <- st_read('Trabajo final/Shapes.gpkg', layer = 'regiones', quiet = T)
 datos <- geojson_sf('Resultados.geojson') %>% 
@@ -180,7 +181,7 @@ texto <- paste0(
   "<b>Classification:</b> ", datos$c_oportunidad
 ) %>% lapply(htmltools::HTML)
 
-leaflet(datos, width = 540) %>%
+leaflet(datos, width = 540, elementId = "mapa") %>%
   addProviderTiles(provider = providers$CartoDB.VoyagerNoLabels) %>%
   addPolygons(data = regiones, weight = 0.5, group = 'Regions', fillOpacity = 0.1, col = 'gray') %>%
   addPolygons(weight = 1.5, color = ~paleta(datos$c_oportunidad),
@@ -193,14 +194,13 @@ leaflet(datos, width = 540) %>%
   addMiniMap(position = "bottomright", toggleDisplay = T, width = 100, height = 110)
 ```
 :::
-</div>
 
 :::
 
 ## Conclusions {.title}
 
 ::: justify
-This work is a primer approach to the areas where strategies can be focused to preserve tropical dry forest in Colombia. However, it is necessary to work in those areas with data on a finer scale that represent adequately the economic dynamic of the farming activities in the region. 
+This work is a primer approach to the areas where strategies can be focused to preserve tropical dry forest in Colombia. However, it is necessary to work in those areas with data on a finer scale that represent adequately the economic dynamic of the farming activities in the region.
 :::
 
 ## Thanks {.title}

@@ -48,3 +48,8 @@ aside {
   display: grid;
   grid-template-columns: 50% 50%;
 }
+
+#mapa {
+  border-radius: 8px;
+  border: 1px solid gray;
+}
