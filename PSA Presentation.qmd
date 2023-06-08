@@ -141,16 +141,16 @@ data %>%
   summarise(area = sum(area_bst)/100, .by = 'region', 
             n = n(), low = sum(Low)) %>%
   e_charts(region) %>%
-  e_pie(area, roseType = 'radius', name = 'Tropical dry forest') %>%
+  e_pie(area, name = 'Tropical dry forest', width = 550) %>%
   e_labels(show = F) %>%
   e_text_style(fontSize = 20) %>%
   e_tooltip(formatter = tooltip) %>%
-  e_legend(left = 'left', orient = 'vertical', itemGap = 30, height = 800, top = '4%')
+  e_legend(left = 'left', orient = 'vertical', itemGap = 20, height = 800)
 ```
 :::
 
 ::: fragment
-###### Opportunity cost in Colombian tropical dry forest
+###### Opportunity cost in Colombian tropical dry forests
 
 ```{r}
 regiones <- st_read('Trabajo final/Shapes.gpkg', layer = 'regiones', quiet = T)
