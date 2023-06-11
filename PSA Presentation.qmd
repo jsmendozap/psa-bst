@@ -45,34 +45,27 @@ From \~9 million of hectares of original tropical dry forest extension, today on
 
 ## Payment for ecosystem services (PES) {.title}
 
-::: {.justify style="font-size: 30px"}
-**The ecosystem services** are the ecological characteristics, functions, or processes that directly or indirectly contribute to human wellbeing: that is, the benefits that people obtain from functioning ecosystems [@costanza2017].
+:::: {.columns}
+
+::: {.column width="40%"}
+::: {.justify style="font-size: 27px"}
+**The ecosystem services** are the ecological characteristics, functions, or processes that directly or indirectly contribute to human wellbeing [@costanza2017].
 :::
 
+![](Auxiliar files/services.jpg){style="height: 340px"}
+:::
+
+::: {.column width="59%"}
 ::: fragment
-::: grid
-<div>
-
-![](Auxiliar%20files/PES.png){style="height: 380px"}
-
-</div>
-
-::: fragment
-::: {style="text-align: center"}
-::: {style="margin-top: 20px; font-size: 30px"}
-**PES modalities**
-:::
-
-![](Auxiliar%20files/pes-modalities.png){style="height: 320px"}
+![](Auxiliar%20files/PES.png){style="height: 400px; padding-top: 50px"}
 :::
 :::
-:::
-:::
+::::
 
 ## Objective {.title}
 
 ::: justify
-Determine the Colombian towns with potential to implement a PES scheme in biodiversity conservation modality. The town potential was established through the opportunity cost[^1] of the main farming activities in regions where the tropical dry forest is present.
+Determine the Colombian towns with potential to implement a PES scheme. The town potential was established through the opportunity cost[^1] of the main farming activities in regions where the tropical dry forest is present.
 :::
 
 [^1]: The opportunity cost refers to the resources that people leave to perceive due to do not choice the best possible alternative.
@@ -200,7 +193,7 @@ leaflet(datos, width = 540, elementId = "mapa") %>%
 ## Conclusions {.title}
 
 ::: justify
-This work is a primer approach to the areas where strategies can be focused to preserve tropical dry forest in Colombia. However, it is necessary to work in those areas with data on a finer scale that represent adequately the economic dynamic of the farming activities in the region.
+This work is a primer approach to the areas where strategies can be focused to preserve tropical dry forest in Colombia.
 :::
 
 ## Thanks {.title}
