@@ -68,7 +68,7 @@ From \~9 million of hectares of original tropical dry forest extension, today on
 Determine the Colombian towns with potential to implement a PES scheme. The town potential was established through the opportunity cost[^1] of the main farming activities in regions where the tropical dry forest is present.
 :::
 
-[^1]: The opportunity cost refers to the resources that people leave to perceive due to do not choice the best possible alternative.
+[^1]: Opportunity cost refers to the resources people forego by not choosing the best possible alternative. 
 
 ## Methodology {.title}
 
