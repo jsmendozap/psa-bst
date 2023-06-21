@@ -70,9 +70,64 @@ Determine the Colombian towns with potential to implement a PES scheme. The town
 
 [^1]: Opportunity cost refers to the resources people forego by not choosing the best possible alternative. 
 
-## Methodology {.title}
+## Methodology {.title auto-animate=true}
 
-![](Auxiliar%20files/methodology.svg)
+:::: {.columns}
+
+::: {.column width=20%}
+
+![](Auxiliar files/Farming activities.svg)
+
+![](Auxiliar files/Results.svg)
+
+:::
+
+::: {.column width=75%}
+
+![](Auxiliar files/Data wrangling.svg)
+
+:::
+::::
+
+
+## Methodology {.title auto-animate=true}
+
+:::: {.columns}
+
+::: {.column width=20%}
+
+![](Auxiliar files/Data wrangling.svg)
+
+![](Auxiliar files/Results.svg)
+
+:::
+
+::: {.column width=75%}
+
+![](Auxiliar files/Farming activities.svg)
+
+:::
+::::
+
+## Methodology {.title auto-animate=true}
+
+:::: {.columns}
+
+::: {.column width=20%}
+
+![](Auxiliar files/Data wrangling.svg)
+
+![](Auxiliar files/Farming activities.svg)
+
+:::
+
+::: {.column width=75%}
+
+![](Auxiliar files/Results.svg)
+
+:::
+::::
+
 
 ## Results {.title}
 
@@ -192,9 +247,11 @@ leaflet(datos, width = 540, elementId = "mapa") %>%
 
 ## Conclusions {.title}
 
-::: justify
+::: conclusions
 This work is a primer approach to the areas where strategies can be focused to preserve tropical dry forest in Colombia.
 :::
+
+![](Auxiliar files/forest.jpg){style="height: 300px; width: 1500px; position: relative; top: 15vh"}
 
 ## Thanks {.title}
 

@@ -49,6 +49,12 @@ aside {
   grid-template-columns: 50% 50%;
 }
 
+.conclusions {
+  text-align: justify;
+  position: relative;
+  top: 40px;
+}
+
 #mapa {
   border-radius: 8px;
   border: 1px solid gray;
